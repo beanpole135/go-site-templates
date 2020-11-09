@@ -1,0 +1,385 @@
+/* Define the color palette */
+:root{
+  --COLOR-Primary: #1196d4;
+  --COLOR-Primary-lighter: #5ac2f2;
+  --COLOR-Primary-darker: #0a5476;
+
+  --COLOR-Secondary: #11d442;
+  --COLOR-Secondary-lighter: #5af280;
+  --COLOR-Secondary-darker: #0a7625;
+
+  --COLOR-Accent: #d47311;
+  --COLOR-Accent-lighter: #f2a65a;
+  --COLOR-Accent-darker: #8e4d0b;
+
+  --COLOR-text-light: #f2f2f2;
+  --COLOR-text-dark: #111111;
+  --COLOR-text-frame: #f2f2f2;
+
+  --COLOR-Background-light: #1196d4;
+  --COLOR-Background-dark: #333;
+  --COLOR-Background-frame: #222222b0;
+
+
+ --COLOR-shadow: #00000080;
+}
+
+a {
+  color: var(--COLOR-Primary-lighter);
+  font-weight: bold;
+}
+a:hover {
+  color: var(--COLOR-Secondary-lighter);
+}
+
+input {
+  font-family: inherit;
+}
+
+/* Simplification for quick rows of items */
+.align-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: var(--COLOR-Background-dark);
+  color: var(--COLOR-text-light);
+  font-weight: bold;
+  text-align: center;
+  position: fixed;
+  height: 2em;
+  width: 100%;
+  top: 0;
+  z-index: 10;
+  font-family: endor;
+}
+
+/* Style the links inside the navigation bar */
+.topnav button {
+  float: left;
+  color: var(--COLOR-text-light);
+  text-align: center;
+  padding: 0.1ex 1em;
+  text-decoration: none;
+  font-size: medium;
+  max-height: 2em;
+  background: transparent;
+  border-radius: 0;
+}
+
+/* Change the color of links on hover */
+.topnav button:hover, .topnav #logout:hover {
+  background-color: var(--COLOR-Primary-lighter);
+  color: var(--COLOR-text-dark);
+}
+
+/* Add a color to the active/current link */
+.topnav button.active {
+  background-color: var(--COLOR-Primary);
+  color: var(--COLOR-text-light);
+}
+
+body {
+  background: var(--COLOR-Background-light);
+  width: 100%;
+  border-spacing: 0;
+  margin: 0;
+  height: 100vh;
+}
+button {
+  font-family: inherit;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+/*h1, h2, h3, h4, h5 {
+	font-family: grenzegotisch;
+}*/
+/*.footer {
+  align-self: flex-end;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(--COLOR-Background-dark);
+  overflow: hidden;
+  align-items: center;
+  font-size: xx-small;
+}
+.footer .button {
+  margin-left: 1ex;
+  font-size: small;
+  padding: 0.5ex;
+}
+.footer .button:hover {
+  color: var(--COLOR-text-dark);
+}*/
+
+table {
+  border-spacing: 0;
+  width: 100%;
+  color: inherit;
+  border-color: inherit;
+  margin-bottom: 1ex;
+}
+tr {
+  border-color: inherit;
+}
+th, td {
+  cursor: pointer;
+  padding: 0.5ex;
+  border-style: solid;
+  border-width: 1px;
+  border-color: inherit;
+  text-align: center;
+  wdith: -moz-available;
+}
+
+/*tr:nth-child(even) {
+  background-color: var(--COLOR-Background-dark);
+  color: var(--COLOR-text-light);
+}*/
+
+td button {
+  height: min-content;
+  font-size: small;
+  padding-bottom: 0.3ex;
+  border-radius: 1ex;
+}
+
+#copyright {
+    padding-right: 1em;
+    text-align: right;
+    font-style: italic;
+    color: var(--COLOR-text-light);
+}
+
+.button, button{
+  color: var(--COLOR-text-light);
+  background-color: var(--COLOR-Primary);
+  display:flex;
+  align-content: center;
+  padding: 0.3ex 0.8ex;
+  border-radius: 1ex;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.button:hover, button:hover {
+  background-color: var(--COLOR-Primary-lighter);
+  color: var(--COLOR-text-dark);
+}
+
+.inputform {
+  display: table;
+}
+
+.inputform p {
+  display: table-row;
+}
+
+.inputform p label, .inputform p input {
+  display: table-cell;
+}
+
+.svg-error {
+  background-image: linear-gradient(to bottom right, red, orange);
+  border-radius: 1ex;
+  border: transparent;
+  min-width: 3ex;
+  padding: 1px
+}
+
+.svg-active {
+  background-image: linear-gradient(to bottom right, lightgreen, lime);
+  border-radius: 1ex;
+  border: transparent;
+  min-width: 3ex;
+  padding: 1px
+}
+
+.svg-warning {
+  background-image: linear-gradient(to bottom right, orange, yellow);
+  border-radius: 1ex;
+  border: transparent;
+  min-width: 3ex;
+  padding: 1px
+}
+
+.panel {
+  width: 30%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  background-color: var(--COLOR-Background-dark);
+  color: var(--COLOR-text-light);
+  overflow-x: hidden;
+  transition: width 0.3s;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  box-shadow: -5ex -0px 2ex var(--COLOR-shadow);
+  border: none;
+  z-index: 100;
+}
+#right-panel{
+  left: auto;
+}
+#left-panel{
+  right: auto;
+}
+
+.panel-header{
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--COLOR-Background-dark);
+  text-align: center;
+  color: var(--COLOR-text-light);
+  margin-bottom: 1ex;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+.panel-content {
+  background-image: url("/static/parchment.jpg");
+  padding-left: 1ex;
+  padding-right: 1ex;
+  margin: 0;
+  color: var(--COLOR-text-dark);
+  flex-grow: 100;
+}
+
+.panel-close-button{
+  display: block;
+  align-self: center;
+  margin-left: auto;
+  color: var(--COLOR-text-light);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: x-large;
+  padding: 1ex;
+  cursor: pointer;
+  margin-right: 1ex;
+  border-radius: 4px;
+}
+.panel-close-button:hover{
+  background-color: var(--COLOR-Primary-lighter);
+}
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom-style: dotted;
+  border-bottom-width: 1px;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  min-width: 10em;
+  width: auto;
+  background-color: var(--COLOR-Background-light);
+  color: var(--COLOR-text-light);
+  text-align: center;
+  border-radius: 5px;
+  padding: 1ex;
+  opacity: 0;
+  transition: opacity 0.3s;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1000;
+  top: 0%;
+  left: 100%;
+}
+
+
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tablink {
+  width: 5em;
+  text-align: center;
+  height: 0; 
+  position: relative;
+  border-right: 1em solid transparent;
+  border-bottom: 2em solid var(--COLOR-Primary-darker);
+  #border-left: 1ex solid transparent;
+  box-sizing: content-box;
+  background: transparent;
+}
+
+.tablink .label{
+  position: absolute;
+  bottom: -30px;
+  left: 25%;
+  color: #fff;
+}
+
+.activetab {
+  border-bottom-color: var(--COLOR-Primary-lighter);
+}
+.activetab .label{
+  color: #ffffff;
+}
+
+.tab-contents{
+  border-top: 1px solid var(--COLOR-Background-dark);
+  padding-left: 1ex;
+  padding-right: 1ex;
+}
+
+dt {
+  margin-left: 1.5em;
+  float: left;
+  font-weight: bold;
+  clear: left;
+  
+}
+dd {
+  text-align: right;
+}
+
+.radio-toggle-active {
+  border: 0.3ex solid var(--COLOR-Primary);
+  background: var(--COLOR-Primary);
+  color: var(--COLOR-text-light);
+  margin: 0;
+  border-radius: 0;
+  text-align: center;
+  padding: 0.5ex;
+}
+.radio-toggle-inactive {
+  border: 0.3ex solid var(--COLOR-Primary);
+  background: var(--COLOR-Background-dark);
+  color: var(--COLOR-text-light);
+  margin: 0;
+  border-radius: 0;
+  text-align: center;
+  padding: 0.5ex;
+}
+
+.active-item {
+  color: var(--COLOR-Primary-lighter);
+  font-weight: bold;
+  text-shadow:1px 3px var(--COLOR-shadow);
+}
+
+.inactive-item {
+  color: var(--COLOR-text-light);
+}
+
+.done-item {
+  color: var(--COLOR-Secondary-lighter);
+}
