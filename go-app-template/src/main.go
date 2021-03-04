@@ -21,6 +21,8 @@ func main() {
   } else {
     SETTINGS = readSettings("")
   }
+  SetupLoginAuth()
+  //Setup the go-app system
     h := &app.Handler{
 		Title:  progname,
 		Author: progname,
@@ -37,6 +39,8 @@ func main() {
   http.Handle("/favicon.ico", http.StripPrefix("/", http.FileServer(http.Dir(InstallDir+"/web"))))
   //Interactive API handling
   http.HandleFunc("/api/", HandleAPI) //api.go
+  http.HandleFunc("/login-oauth/", StartOAuthLogin) //auth_oauth.go
+  http.HandleFunc("/handle-oauth/", HandleOAuthLogin) //auth_oauth.go
   //The routing specific to loading the WASM app
   http.HandleFunc("/",h.ServeHTTP) 
   //Now start listening

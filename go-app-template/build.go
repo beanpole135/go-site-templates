@@ -22,6 +22,7 @@ func exit_err(err error, details string){
 }
 
 func runCMD( command []string, workdir string, envs ...string) error {
+  //fmt.Println("Running Command:", command)
   wd, _ := os.Getwd() //get working directory
   cmd := exec.Command( command[0], command[1:]...)
   if workdir != "" { cmd.Dir = workdir }
@@ -103,7 +104,7 @@ func buildWasm() error {
   fmt.Println(" - building WASM")
   symlinkAll("src-common", "src-wasm")
   err := runCMD( []string{"go","get"}, "src-wasm")
-  //exit_err(err, "WASM go get failed")
+  exit_err(err, "WASM go get failed")
   err = runCMD( []string{"go","build","-o","app.wasm"}, "src-wasm", "GOOS=js", "GOARCH=wasm")
   err = os.Rename("src-wasm/app.wasm", "web/app.wasm")
   return err
@@ -113,7 +114,7 @@ func doBuild() error {
   fmt.Println(" - building server")
   symlinkAll("src-common", "src")
   err := runCMD( []string{"go","get"}, "src")
-  //exit_err(err, "go get failed")
+  exit_err(err, "SRC go get failed")
   berr := runCMD( []string{"go","build","-o",pName}, "src")
   if _, terr := os.Stat("src/"+pName) ; !os.IsExist(terr) {
     err = os.Rename("src/"+pName, pName)
