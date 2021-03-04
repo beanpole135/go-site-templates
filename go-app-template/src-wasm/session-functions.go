@@ -6,10 +6,9 @@ import (
 
 // Various interaction functions for the global session
 
-//
 func (P *Session) ChangePage(pageid string, title string){
   if !CACHE.LoggedIn {
-    P.current_page = &PageExample{} //Use a login page here of some kind
+    P.current_page = &PageLogin{} //Use a login page here of some kind
 
   }else{
 	CACHE.PageTitle = title
