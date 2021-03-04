@@ -6,6 +6,22 @@ import (
 
 // Various interaction functions for the global session
 
+//
+func (P *Session) ChangePage(pageid string, title string){
+  if !CACHE.LoggedIn {
+    P.current_page = &PageExample{} //Use a login page here of some kind
+
+  }else{
+	CACHE.PageTitle = title
+	switch pageid {
+		default:
+			P.current_page = &PageExample{}
+	}
+  }
+  //Ensure the slide-out panel and popups are cleared on page changes
+  P.HidePopup()
+  P.HidePanel()
+}
 
 // === Popup Dialogs ===
 func (P *Session) HidePopup() {

@@ -44,9 +44,12 @@ type popupStringResult func(string)
 
 // ==== MAIN RENDER ROUTINE ====
 func (S *Session) Render() app.UI {
-	return app.Main().Body(
+	if S.current_page == nil {
+		S.ChangePage("/","")
+	}
+	return app.Div().Body(
 		S.RenderHeader(),
-		app.P().Text("I am alive!!!"),
+		S.current_page.Render(),
 		S.RenderFooter(),
 		S.RenderPanel(),
 		S.RenderPopup(),
