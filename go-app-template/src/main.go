@@ -20,7 +20,7 @@ var SESSION *Session  //Primary page-render system (session.go)
 func main() {
   SESSION = new( Session )
   SESSION.ChangePage("/","")
-  fmt.Println("Page Loaded:", SESSION.Current_page != nil)
+  fmt.Println("Page Loaded:", SC.Current_page != nil)
   //For the WASM build - this is the only section run
   app.Route("/", SESSION)
   app.RunWhenOnBrowser()

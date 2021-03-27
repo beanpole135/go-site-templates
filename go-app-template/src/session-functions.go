@@ -10,16 +10,16 @@ import (
 func (P *Session) ChangePage(pageid string, title string){
   fmt.Println("Change Page:", pageid, title, CACHE.LoggedIn)
   if !CACHE.LoggedIn {
-    P.Current_page = &PageLogin{} //Use a login page here of some kind
+    SC.Current_page = &PageLogin{} //Use a login page here of some kind
 
   }else{
 	CACHE.PageTitle = title
 	switch pageid {
 		default:
-			P.Current_page = &PageExample{}
+			SC.Current_page = &PageExample{}
 	}
   }
-  fmt.Println(" - Page Changed: ", P.Current_page != nil)
+  fmt.Println(" - Page Changed: ", SC.Current_page != nil)
   //Ensure the slide-out panel and popups are cleared on page changes
   P.HidePopup()
   P.HidePanel()
@@ -27,21 +27,21 @@ func (P *Session) ChangePage(pageid string, title string){
 
 // === Popup Dialogs ===
 func (P *Session) HidePopup() {
-	if P.ShowPopup == false { return }
-	P.ShowPopup = false
-	P.Popup_page = nil
-	P.PopupYesNo = nil
-	P.PopupString = nil
+	if SC.ShowPopup == false { return }
+	SC.ShowPopup = false
+	SC.Popup_page = nil
+	SC.PopupYesNo = nil
+	SC.PopupString = nil
 	P.Update()
 }
 
 func (P *Session) Popup( icon string, text string){
 	//Quick 3-second popup message
-	P.PopupIcon = icon
-	P.PopupText = text
-	P.ShowPopup = true
-	P.PopupYesNo = nil
-	P.PopupString = nil
+	SC.PopupIcon = icon
+	SC.PopupText = text
+	SC.ShowPopup = true
+	SC.PopupYesNo = nil
+	SC.PopupString = nil
 	P.Update()
 	go func(){
 		time.Sleep(3 * time.Second)
@@ -51,54 +51,54 @@ func (P *Session) Popup( icon string, text string){
 
 func (P *Session) PopupTextBox( icon string, text string){
 	// Popup message without a timed close (user has to click a button to make it go away)
-	P.PopupIcon = icon
-	P.PopupText = text
-	P.ShowPopup = true
-	P.PopupYesNo = nil
-	P.PopupString = nil
+	SC.PopupIcon = icon
+	SC.PopupText = text
+	SC.ShowPopup = true
+	SC.PopupYesNo = nil
+	SC.PopupString = nil
 	P.Update()
 }
 
 func (P *Session) PopupYesNoBox( icon string, text string, callback PopupResult){
 	// Popup with a Yes/No question
-	P.PopupIcon = icon
-	P.PopupText = text
-	P.ShowPopup = true
-	P.PopupYesNo = callback
+	SC.PopupIcon = icon
+	SC.PopupText = text
+	SC.ShowPopup = true
+	SC.PopupYesNo = callback
 	P.Update()
 }
 
 func (P *Session) PopupStringQuestion( icon string, text string, callback PopupStringResult) {
 	// Popup requesting the user to type in some text
-	P.PopupIcon = icon
-	P.PopupText = text
-	P.ShowPopup = true
-	P.PopupString = callback
+	SC.PopupIcon = icon
+	SC.PopupText = text
+	SC.ShowPopup = true
+	SC.PopupString = callback
 	P.Update()
 }
 
 func (P *Session) PopupDialog(icon string, text string, body DialogPage){
 	// Generic popup with a custom render item for the body.
-	P.PopupIcon = icon
-	P.PopupText = text
-	P.ShowPopup = true
-	P.Popup_page = body
+	SC.PopupIcon = icon
+	SC.PopupText = text
+	SC.ShowPopup = true
+	SC.Popup_page = body
 	P.Update()
 }
 
 // === Slide-out Panel functions ===
 func (P *Session) ShowPanel( icon string, title string, body DialogPage) {
 	// Slide-out panel to show a generic render item
-	P.Panel_page = body
-	P.Panel_title = title
-	P.Panel_icon = icon
-	P.Panel_show = true
+	SC.Panel_page = body
+	SC.Panel_title = title
+	SC.Panel_icon = icon
+	SC.Panel_show = true
 	P.Update()
 }
 
 func (P *Session) HidePanel(){
-	if P.Panel_show == false { return } //nothing to do
-	P.Panel_show = false
-	P.Panel_page = nil
+	if SC.Panel_show == false { return } //nothing to do
+	SC.Panel_show = false
+	SC.Panel_page = nil
 	P.Update()
 }

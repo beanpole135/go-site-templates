@@ -11,25 +11,6 @@ import (
 // This sets up all the individual global-visuals and shows the right pages
 type Session struct {
 	app.Compo
-	//Main Page Information
-	Current_header DialogPage
-	Current_page MainPage
-	Current_footer DialogPage
-
-	//Pull-out panel information
-	Panel_show  bool
-	Panel_page DialogPage
-	Panel_title string
-	Panel_icon string
-
-	//Popup information
-	ShowPopup bool
-	PopupText string
-	PopupIcon string
-	PopupYesNo PopupResult
-	PopupString PopupStringResult
-	Popup_page DialogPage
-
 }
 
 // Primary Page-type definitions
@@ -47,14 +28,13 @@ type PopupStringResult func(string)
 
 // ==== MAIN RENDER ROUTINE ====
 func (S *Session) Render() app.UI {
-	fmt.Println("Session Render Page:", S.Current_page != nil )
-	if S.Current_page == nil {
-		//This is only used in the v8, server-side to return nothing
+	fmt.Println("Session Render Page:", SC.Current_page != nil )
+	if SC.Current_page == nil {
 		return app.Div()
 	}
 	return app.Div().Body(
 		S.RenderHeader(),
-		S.Current_page.Render(),
+		SC.Current_page.Render(),
 		S.RenderFooter(),
 		S.RenderPanel(),
 		S.RenderPopup(),
@@ -63,23 +43,23 @@ func (S *Session) Render() app.UI {
 
 // ==== Render routines for individual global components ====
 func (S *Session) RenderHeader() app.UI {
-	if S.Current_header == nil { return nil }
-	return S.Current_header.Render().Class("body-header")
+	if SC.Current_header == nil { return nil }
+	return SC.Current_header.Render().Class("body-header")
 }
 func (S *Session) RenderFooter() app.UI {
-	if S.Current_footer == nil { return nil }
-	return S.Current_footer.Render().Class("body-footer")
+	if SC.Current_footer == nil { return nil }
+	return SC.Current_footer.Render().Class("body-footer")
 }
 
 func (P *Session) RenderPopup() app.UI {
-	if P.ShowPopup {
-		if P.Popup_page != nil {
+	if SC.ShowPopup {
+		if SC.Popup_page != nil {
 			return app.Dialog().Hidden(false).Open(true).Body( 
 					app.Span().Class("align-row").Body(
-						app.P().Text( P.PopupText ),
+						app.P().Text( SC.PopupText ),
 						app.Button().Text("cancel").OnClick(P.HidePopupCallback),
 					),
-					P.Popup_page.Render(),
+					SC.Popup_page.Render(),
 				).
 				Style("border","1ex solid var(--COLOR-Accent)").
 				Style("background","var(--COLOR-Background-dark)").
@@ -89,9 +69,9 @@ func (P *Session) RenderPopup() app.UI {
 				Style("border-radius","1ex").
 				Style("z-index","1000").
 				Style("max-width","75%")
-		} else if P.PopupYesNo != nil {
+		} else if SC.PopupYesNo != nil {
 			return app.Dialog().Hidden(false).Open(true).Body( 
-				app.P().Text(P.PopupText).Style("font-size","large"),
+				app.P().Text(SC.PopupText).Style("font-size","large"),
 				app.Div().Body(
 					app.Button().ID("no").Text("No").OnClick(P.PopupAnswer),
 					app.Button().ID("yes").Text("Yes").OnClick(P.PopupAnswer),
@@ -108,9 +88,9 @@ func (P *Session) RenderPopup() app.UI {
 			Style("border-radius","1ex").
 			Style("z-index","1000").
 			Style("max-width","75%")
-		} else if P.PopupString != nil {
+		} else if SC.PopupString != nil {
 			return app.Dialog().Hidden(false).Open(true).Body( 
-				app.P().Text(P.PopupText).Style("font-size","large"),
+				app.P().Text(SC.PopupText).Style("font-size","large"),
 				app.Input().Type("text").ID("dialog_text_input").Style("margin-bottom","1ex"),
 				app.Div().Body(
 					app.Button().ID("no").Text("Cancel").OnClick(P.PopupAnswer),
@@ -129,7 +109,7 @@ func (P *Session) RenderPopup() app.UI {
 			Style("max-width","75%")
 		} else {
 			return app.Dialog().Hidden(false).Open(true).Body( 
-					app.P().Text(P.PopupText),
+					app.P().Text(SC.PopupText),
 					app.Button().Text("Continue").OnClick(P.PopupAnswer),
 				).
 				Style("border","1ex solid var(--COLOR-Accent)").
@@ -148,20 +128,20 @@ func (P *Session) RenderPopup() app.UI {
 /// ===  Panel Pullout ====
 
 func (P *Session) RenderPanel() app.UI {
-  if P.Panel_page != nil {
-	return app.Dialog().Class("panel").ID("right-panel").Hidden(!P.Panel_show).Open(P.Panel_show).Body(
+  if SC.Panel_page != nil {
+	return app.Dialog().Class("panel").ID("right-panel").Hidden(!SC.Panel_show).Open(SC.Panel_show).Body(
 		app.Span().Class("panel-header").Body( 
-			app.H2().Text(P.Panel_title),
+			app.H2().Text(SC.Panel_title),
 			app.Button().Text("Cancel").OnClick(P.HidePanelCallback).Style("padding","1ex"),
 		),
-		P.Panel_page.Render().Class("panel-content"),
+		SC.Panel_page.Render().Class("panel-content"),
 	).
 	Style("width","50%").
 	Style("z-index","500")
   }else{
-	return app.Dialog().Class("panel").ID("right-panel").Hidden(!P.Panel_show).Open(P.Panel_show).Body(
+	return app.Dialog().Class("panel").ID("right-panel").Hidden(!SC.Panel_show).Open(SC.Panel_show).Body(
 		app.Span().Class("panel-header").Body( 
-			app.H2().Text(P.Panel_title),
+			app.H2().Text(SC.Panel_title),
 			app.Button().Text("Cancel").OnClick(P.HidePanelCallback).Style("padding","1ex"),
 		),
 		app.Div().Class("panel-content"),
@@ -182,17 +162,17 @@ func (P *Session) HidePopupCallback(ctx app.Context, e app.Event) {
 }
 
 func (P *Session) PopupAnswer(ctx app.Context, e app.Event){
-	P.ShowPopup = false
-	P.PopupText = ""
-	P.PopupIcon = ""
-	if P.PopupYesNo != nil {
+	SC.ShowPopup = false
+	SC.PopupText = ""
+	SC.PopupIcon = ""
+	if SC.PopupYesNo != nil {
 		id := ctx.JSSrc.Get("id").String()
 		switch id {
-			case "no": P.PopupYesNo(false)
-			case "yes": P.PopupYesNo(true)	
+			case "no": SC.PopupYesNo(false)
+			case "yes": SC.PopupYesNo(true)	
 		}
-		P.PopupYesNo = nil
-	}else if P.PopupString != nil {
+		SC.PopupYesNo = nil
+	}else if SC.PopupString != nil {
 		id := ctx.JSSrc.Get("id").String()
 		if id == "no" {
 			//cancelled - do nothing
@@ -200,9 +180,9 @@ func (P *Session) PopupAnswer(ctx app.Context, e app.Event){
 		} else {
 			//Need to read the string value from the input box
 			input := app.Window().GetElementByID("dialog_text_input").Get("value").String()
-			P.PopupString(input)
+			SC.PopupString(input)
 		}
-		P.PopupString = nil
+		SC.PopupString = nil
 	}
 	P.HidePopup()
 }
