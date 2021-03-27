@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/maxence-charriere/go-app/v7/pkg/app"
+	"github.com/maxence-charriere/go-app/v8/pkg/app"
+	"fmt"
 )
 
 // Example/Template file for a new page
@@ -12,6 +13,7 @@ type PageExample struct {
 }
 
 func (P *PageExample) Render() app.HTMLMain { //return is important for the "MainPage" interface definition
+	fmt.Println("Render Page Example")
 	return app.Main().Body(
 		app.H1().Text("Header1"),
 		app.H2().Text("Header2"),

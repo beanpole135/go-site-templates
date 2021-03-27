@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"fmt"
 	"os"
-	"github.com/maxence-charriere/go-app/v7/pkg/app"
+	"github.com/maxence-charriere/go-app/v8/pkg/app"
 )
 
 
@@ -15,7 +15,16 @@ var progname string = "ChangeME"
 var SETTINGS Settings
 // ===================
 
+var SESSION *Session  //Primary page-render system (session.go)
+
 func main() {
+  SESSION = new( Session )
+  SESSION.ChangePage("/","")
+  fmt.Println("Page Loaded:", SESSION.Current_page != nil)
+  //For the WASM build - this is the only section run
+  app.Route("/", SESSION)
+  app.RunWhenOnBrowser()
+  //For the server-side, everything below gets used
   if len(os.Args) > 1 {
     SETTINGS = readSettings(os.Args[1])
   } else {

@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/maxence-charriere/go-app/v7/pkg/app"
+	"github.com/maxence-charriere/go-app/v8/pkg/app"
+	"fmt"
 )
 
 // Example/Template file for a new page
@@ -12,13 +13,18 @@ type PageLogin struct {
 }
 
 func (P *PageLogin) Render() app.HTMLMain { //return is important for the "MainPage" interface definition
+	fmt.Println("Render PageLogin")
 	return app.Main().Body(
 		app.Button().Text("Login Test").OnClick(P.Login),
 	)
 }
 
 func (P *PageLogin) Login(ctx app.Context, ev app.Event){
-	err := SendAPI_Login("test","test")
+	//Temporary test for debugging go-app v8
+	CACHE.LoggedIn = true
+	SESSION.ChangePage("/","")
+	SESSION.Update()
+/*	err := SendAPI_Login("test","test")
 	if err == nil { 
 		CACHE.LoggedIn = true
 		SESSION.ChangePage("/","")
@@ -26,4 +32,5 @@ func (P *PageLogin) Login(ctx app.Context, ev app.Event){
 	}else{
 		SESSION.Popup("icon","Error Logging in...")
 	}
+*/
 }
