@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-//var SESSION Session //Primary page-render system (session.go)
+var SESSION *Session //Primary page-render system (session.go)
 
 // Primary Visual Element for the UI
 // This sets up all the individual global-visuals and shows the right pages
@@ -28,6 +28,11 @@ type PopupStringResult func(string)
 
 // ==== MAIN RENDER ROUTINE ====
 func (S *Session) Render() app.UI {
+	if SESSION != S {
+		fmt.Println("First session init!")
+		SESSION = S
+		SESSION.ChangePage("/","")
+	}
 	fmt.Println("Session Render Page:", SC.Current_page != nil )
 	if SC.Current_page == nil {
 		return app.Div()
@@ -162,27 +167,21 @@ func (P *Session) HidePopupCallback(ctx app.Context, e app.Event) {
 }
 
 func (P *Session) PopupAnswer(ctx app.Context, e app.Event){
-	SC.ShowPopup = false
-	SC.PopupText = ""
-	SC.PopupIcon = ""
 	if SC.PopupYesNo != nil {
 		id := ctx.JSSrc.Get("id").String()
 		switch id {
 			case "no": SC.PopupYesNo(false)
 			case "yes": SC.PopupYesNo(true)	
 		}
-		SC.PopupYesNo = nil
 	}else if SC.PopupString != nil {
 		id := ctx.JSSrc.Get("id").String()
 		if id == "no" {
 			//cancelled - do nothing
-			//P.PopupString("")
 		} else {
 			//Need to read the string value from the input box
 			input := app.Window().GetElementByID("dialog_text_input").Get("value").String()
 			SC.PopupString(input)
 		}
-		SC.PopupString = nil
 	}
 	P.HidePopup()
 }

@@ -59,7 +59,7 @@ func localCopy(from string, to string){
 func doClean(){
   files := []string{ pName, "web/app.wasm" } //files to remove
   dirs := []string{ "dist" } //dirs to remove
-  linkdirs := []string{ "src"}
+  linkdirs := []string{ "src", "src-wasm"}
   //Remove files
   for _, file := range files {
     if _, err := os.Stat(file) ; !os.IsExist(err) { os.Remove(file) }
@@ -102,17 +102,17 @@ func doPackage() error{
 
 func buildWasm() error {
   fmt.Println(" - building WASM")
-  //symlinkAll("src-common", "src-wasm")
-  //err := runCMD( []string{"go","get"}, "src-wasm")
-  //exit_err(err, "WASM go get failed")
-  err := runCMD( []string{"go","build","-o","app.wasm"}, "src", "GOOS=js", "GOARCH=wasm")
-  err = os.Rename("src/app.wasm", "web/app.wasm")
+  symlinkAll("src-common", "src-wasm")
+  err := runCMD( []string{"go","get"}, "src-wasm")
+  exit_err(err, "WASM go get failed")
+  err = runCMD( []string{"go","build","-o","app.wasm"}, "src-wasm", "GOOS=js", "GOARCH=wasm")
+  err = os.Rename("src-wasm/app.wasm", "web/app.wasm")
   return err
 }
 
 func doBuild() error {
   fmt.Println(" - building server")
-  //symlinkAll("src-common", "src")
+  symlinkAll("src-common", "src")
   err := runCMD( []string{"go","get"}, "src")
   exit_err(err, "SRC go get failed")
   berr := runCMD( []string{"go","build","-o",pName}, "src")

@@ -15,15 +15,11 @@ var progname string = "ChangeME"
 var SETTINGS Settings
 // ===================
 
-var SESSION *Session  //Primary page-render system (session.go)
 
 func main() {
-  SESSION = new( Session )
-  SESSION.ChangePage("/","")
-  fmt.Println("Page Loaded:", SC.Current_page != nil)
-  //For the WASM build - this is the only section run
-  app.Route("/", SESSION)
-  app.RunWhenOnBrowser()
+  //SEO Rendering functionality
+  app.Route("/", new(SEO) )
+  app.RunWhenOnBrowser() //ignored on the server-side builds
   //For the server-side, everything below gets used
   if len(os.Args) > 1 {
     SETTINGS = readSettings(os.Args[1])
