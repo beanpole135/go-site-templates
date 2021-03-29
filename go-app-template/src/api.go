@@ -47,12 +47,14 @@ func HandleAPI(w http.ResponseWriter, r *http.Request){
 	} else {
 		//Evaluate Request
 		if A.API =="login" {
+			fmt.Println("Got Login Request")
 			//Generate a login token and save it as a cookie in their browser
 			if A.SessionToken == "" {
 				GenerateLoginToken(w, r, A.UserIDAuthorized)
 			}
 			err = nil
 		}else if A.API == "logout" {
+			fmt.Println("Got Logout Request")
 			if A.SessionToken != "" {
 				RemoveLoginToken(w, r, A.SessionToken)
 			}

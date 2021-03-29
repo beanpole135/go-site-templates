@@ -20,11 +20,7 @@ func (P *PageLogin) Render() app.HTMLMain { //return is important for the "MainP
 }
 
 func (P *PageLogin) Login(ctx app.Context, ev app.Event){
-	//Temporary test for debugging go-app v8
-	CACHE.LoggedIn = true
-	SESSION.ChangePage("/","")
-	SESSION.Update()
-/*	err := SendAPI_Login("test","test")
+	err := SendAPI_Login("test","test")
 	if err == nil { 
 		CACHE.LoggedIn = true
 		SESSION.ChangePage("/","")
@@ -32,5 +28,4 @@ func (P *PageLogin) Login(ctx app.Context, ev app.Event){
 	}else{
 		SESSION.Popup("icon","Error Logging in...")
 	}
-*/
 }

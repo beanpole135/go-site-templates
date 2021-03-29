@@ -39,7 +39,7 @@ func SendAPI_Login(username string, password string) error {
 	//Special function to include the username/password as part of the login API
 	// Does not wrap the SendAPI function like most will
 	rawurl := app.Window().URL()
-	rawurl.Path = "/login"
+	rawurl.Path = "/api/login"
 	rawurl.RawQuery = ""
 	rawurl.Fragment = ""
 	req, err := http.NewRequest("GET",rawurl.String(), nil)
