@@ -6,6 +6,7 @@ import (
 	"github.com/maxence-charriere/go-app/v8/pkg/app"
 	"bytes"
 	"io/ioutil"
+	"errors"
 )
 
 // Generic funtion for sending an arbitrary API call
@@ -32,6 +33,10 @@ func SendAPI(api string, args interface{}) ([]byte, error) {
 	//Now read the reply and return
 	if err != nil { return []byte{}, err } //error in request/reply
 	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return []byte{}, errors.New("Error Code: " +resp.Status)
+	}
+
 	return ioutil.ReadAll(resp.Body)
 }
 
@@ -44,12 +49,17 @@ func SendAPI_Login(username string, password string) error {
 	rawurl.Fragment = ""
 	req, err := http.NewRequest("GET",rawurl.String(), nil)
 	req.SetBasicAuth(username,password)
-	_, err = http.DefaultClient.Do(req)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil { return err } //error in request/reply
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		err = errors.New("Error Code: " +resp.Status)
+	}
 	return err
 }
 
 func SendAPI_Logout() error {
 	//Standard form function - just uses the SendAPI function inside
-	_, err := SendAPI("logout", nil)
+	_, err := SendAPI("logout", nil) //no API body needed for this one
 	return err
 }

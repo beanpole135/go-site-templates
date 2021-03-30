@@ -15,7 +15,7 @@ func PerformLogin(user string, password string) string {
 
 	// SETUP AS APPROPRIATE FOR APPLICATION
 	// This could use LDAP, or an internal database/lookup, or a remote login call as needed
-	fmt.Println("PerformLogin() function is not setup yet. Allowing all access")
+	fmt.Println("src/auth_session.go : PerformLogin() function is not setup yet. Allowing all access")
 	return user
 }
 
