@@ -109,7 +109,7 @@ func (P *Session) RenderPopup() app.UI {
 				app.Button().Text("cancel").OnClick(P.HidePopupCallback),
 			),
 			SC.Popup_page.Render(),
-		)
+		).Style("display","flex").Style("flex-direction","column")
 	} else if SC.PopupYesNo != nil {
 		return P.RenderPopupDialog().Body(
 			app.P().Text(SC.PopupText).Style("font-size", "large"),
@@ -120,11 +120,11 @@ func (P *Session) RenderPopup() app.UI {
 				Style("display", "flex").
 				Style("align-items", "center").
 				Style("justify-content", "space-evenly"),
-		)
+		).Style("display","flex").Style("flex-direction","column")
 	} else if SC.Popup_menu != nil {
 		return P.RenderPopupDialog().Body(
 			app.Range(SC.Popup_menu).Slice(P.RenderMenuItem),
-		)
+		).Style("display","flex").Style("flex-direction","column")
 
 	} else if SC.PopupString != nil {
 		return P.RenderPopupDialog().Body(
@@ -134,7 +134,7 @@ func (P *Session) RenderPopup() app.UI {
 				app.Button().ID("no").Text("Cancel").OnClick(P.PopupAnswer),
 				app.Button().ID("yes").Text("Continue").OnClick(P.PopupAnswer),
 			).Style("display", "flex").Style("align-items", "center").Style("justify-content", "space-evenly"),
-		)
+		).Style("display","flex").Style("flex-direction","column")
 	} else {
 		return P.RenderPopupDialog().Body(
 			app.P().Text(SC.PopupText),

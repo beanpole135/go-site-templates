@@ -230,7 +230,7 @@ td button {
   margin-right: 1em;
 }
 .panel-content {
-  background-image: url("/static/parchment.jpg");
+  background: var(--COLOR-Background-light);
   padding-left: 1ex;
   padding-right: 1ex;
   margin: 0;
