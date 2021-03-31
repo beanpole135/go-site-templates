@@ -81,6 +81,7 @@ func (S *Session) Render() app.UI {
 		S.RenderFooter(),
 		S.RenderPanel(),
 		S.RenderPopup(),
+		S.RenderCoverWindow(),
 	)
 }
 
@@ -102,8 +103,9 @@ func (P *Session) RenderPopup() app.UI {
 	if !SC.ShowPopup {
 		return nil
 	}
+	dlg := P.RenderPopupDialog()
 	if SC.Popup_page != nil {
-		return P.RenderPopupDialog().Body(
+		dlg.Body(
 			app.Span().Class("align-row").Body(
 				app.P().Text(SC.PopupText),
 				app.Button().Text("cancel").OnClick(P.HidePopupCallback),
@@ -111,7 +113,7 @@ func (P *Session) RenderPopup() app.UI {
 			SC.Popup_page.Render(),
 		).Style("display","flex").Style("flex-direction","column")
 	} else if SC.PopupYesNo != nil {
-		return P.RenderPopupDialog().Body(
+		dlg.Body(
 			app.P().Text(SC.PopupText).Style("font-size", "large"),
 			app.Div().Body(
 				app.Button().ID("no").Text("No").OnClick(P.PopupAnswer),
@@ -122,12 +124,12 @@ func (P *Session) RenderPopup() app.UI {
 				Style("justify-content", "space-evenly"),
 		).Style("display","flex").Style("flex-direction","column")
 	} else if SC.Popup_menu != nil {
-		return P.RenderPopupDialog().Body(
+		dlg.Body(
 			app.Range(SC.Popup_menu).Slice(P.RenderMenuItem),
 		).Style("display","flex").Style("flex-direction","column")
 
 	} else if SC.PopupString != nil {
-		return P.RenderPopupDialog().Body(
+		dlg.Body(
 			app.P().Text(SC.PopupText).Style("font-size", "large"),
 			app.Input().Type("text").ID("dialog_text_input").Style("margin-bottom", "1ex"),
 			app.Div().Body(
@@ -136,15 +138,16 @@ func (P *Session) RenderPopup() app.UI {
 			).Style("display", "flex").Style("align-items", "center").Style("justify-content", "space-evenly"),
 		).Style("display","flex").Style("flex-direction","column")
 	} else {
-		return P.RenderPopupDialog().Body(
+		dlg.Body(
 			app.P().Text(SC.PopupText),
 			app.Button().Text("Continue").OnClick(P.PopupAnswer),
 		)
 	}
-
+	return dlg
 }
 func (P *Session) RenderPopupDialog() app.HTMLDialog {
 	return app.Dialog().Hidden(false).Open(true).
+		Class("popup").
 		Style("border", "0.2ex solid var(--COLOR-Accent)").
 		Style("background", "var(--COLOR-Background-dark)").
 		Style("color", "var(--COLOR-text-light)").
@@ -153,6 +156,25 @@ func (P *Session) RenderPopupDialog() app.HTMLDialog {
 		Style("border-radius", "1ex").
 		Style("z-index", "1000").
 		Style("max-width", "50%")
+}
+func (P *Session) RenderCoverWindow() app.UI {
+	if !SC.ShowPopup && SC.Panel_page == nil{
+		return nil
+	}
+	//Need to show a cover window
+	cover := app.Div().
+		Style("background","#00000010").
+		Style("position","absolute").
+		Style("top","0").
+		Style("bottom","0").
+		Style("left","0").
+		Style("right","0")
+	if SC.ShowPopup{
+		return cover.Style("z-index","999").OnClick(P.HidePopupCallback)
+	}else{
+		return cover.Style("z-index","499").OnClick(P.HidePanelCallback)
+	}
+		
 }
 
 func (P *Session) RenderMenuItem(index int) app.UI {
@@ -174,12 +196,12 @@ func (P *Session) RenderMenuItem(index int) app.UI {
 func (P *Session) RenderPanel() app.UI {
 	if SC.Panel_page != nil {
 		return app.Dialog().Class("panel").ID("right-panel").Hidden(!SC.Panel_show).Open(SC.Panel_show).Body(
-			app.Span().Class("panel-header").Body(
-				app.H2().Text(SC.Panel_title),
-				app.Button().Text("Cancel").OnClick(P.HidePanelCallback).Style("padding", "1ex"),
-			),
-			SC.Panel_page.Render().Class("panel-content"),
-		).
+				app.Span().Class("panel-header").Body(
+					app.H2().Text(SC.Panel_title),
+					app.Button().Text("Cancel").OnClick(P.HidePanelCallback).Style("padding", "1ex"),
+				),
+				SC.Panel_page.Render().Class("panel-content"),
+			).
 			Style("width", "50%").
 			Style("z-index", "500")
 	} else {
@@ -190,8 +212,8 @@ func (P *Session) RenderPanel() app.UI {
 			),
 			app.Div().Class("panel-content"),
 		).
-			Style("width", "0").
-			Style("z-index", "500")
+		Style("width", "0").
+		Style("z-index", "500")
 	}
 }
 
