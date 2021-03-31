@@ -1,13 +1,13 @@
 package main
 
 import (
-	"net/http"
-	"time"
-	"github.com/gorilla/securecookie"
-	"sync"
-	"fmt"
-	"io/ioutil"
 	"encoding/json"
+	"fmt"
+	"github.com/gorilla/securecookie"
+	"io/ioutil"
+	"net/http"
+	"sync"
+	"time"
 )
 
 func PerformLogin(user string, password string) string {
@@ -25,32 +25,38 @@ func PerformLogin(user string, password string) string {
 //   web app establishes with the server after it loads in the browser
 
 type AuthSession struct {
-	Login_name string	`json:"login_name"`		//User ID / username
-	Expires int64		`json:"-"`
+	Login_name string `json:"login_name"` //User ID / username
+	Expires    int64  `json:"-"`
 }
 
 func (A *AuthSession) SetExpire(temporary bool) {
 	if temporary {
 		//Quick temporary timeout (for loading previous sessions)
 		A.Expires = time.Now().Add(time.Minute * 5).Unix()
-	}else{
+	} else {
 		//Long-term timeout for standard login
 		A.Expires = time.Now().Add(time.Hour * 12).Unix()
 	}
 }
 
-var secure *securecookie.SecureCookie = securecookie.New( securecookie.GenerateRandomKey(64), nil)
+var secure *securecookie.SecureCookie = securecookie.New(securecookie.GenerateRandomKey(64), nil)
 var loginSessions map[string]*AuthSession = make(map[string]*AuthSession)
-var cookiename string = progname+"-session"
+var cookiename string = progname + "-session"
 var lsesslock sync.Mutex
 var sesschange bool = false
 
-func SetupLoginAuth(){
+func SetupLoginAuth() {
 	//Initialization function
 	changed := false
-	if SETTINGS.LSessHashKey == nil { SETTINGS.LSessHashKey = securecookie.GenerateRandomKey(64) ; changed = true }
-	if SETTINGS.LSessBlockKey == nil { SETTINGS.LSessBlockKey = securecookie.GenerateRandomKey(32) ; changed = true }
-	secure = securecookie.New( SETTINGS.LSessHashKey, nil)
+	if SETTINGS.LSessHashKey == nil {
+		SETTINGS.LSessHashKey = securecookie.GenerateRandomKey(64)
+		changed = true
+	}
+	if SETTINGS.LSessBlockKey == nil {
+		SETTINGS.LSessBlockKey = securecookie.GenerateRandomKey(32)
+		changed = true
+	}
+	secure = securecookie.New(SETTINGS.LSessHashKey, nil)
 	//Load last session hash
 	if changed {
 		SETTINGS.Save() //Save the new keys into the config for next time
@@ -79,30 +85,32 @@ func PruneTokensThread() {
 // ============================
 // Auth Session Token Management
 // ============================
-func saveAuthSession(cookieTok string, auth *AuthSession){
-  if auth.Expires == 0 {
-    auth.SetExpire(true)
-  }
-  lsesslock.Lock()
-  loginSessions[cookieTok] = auth
-  sesschange = true
-  lsesslock.Unlock()
+func saveAuthSession(cookieTok string, auth *AuthSession) {
+	if auth.Expires == 0 {
+		auth.SetExpire(true)
+	}
+	lsesslock.Lock()
+	loginSessions[cookieTok] = auth
+	sesschange = true
+	lsesslock.Unlock()
 }
 
-func findAuthSession(cookieTok string) *AuthSession{
-  auth, ok := loginSessions[cookieTok]
-  if !ok { return nil }
-  if auth.Expires > 0 && auth.Expires < time.Now().Unix() {
-    lsesslock.Lock()
-    delete(loginSessions, cookieTok)
-    sesschange = true
-    lsesslock.Unlock()
-    return nil
-  }
-  return auth
+func findAuthSession(cookieTok string) *AuthSession {
+	auth, ok := loginSessions[cookieTok]
+	if !ok {
+		return nil
+	}
+	if auth.Expires > 0 && auth.Expires < time.Now().Unix() {
+		lsesslock.Lock()
+		delete(loginSessions, cookieTok)
+		sesschange = true
+		lsesslock.Unlock()
+		return nil
+	}
+	return auth
 }
 
-func deleteAuthSession(cookieTok string){
+func deleteAuthSession(cookieTok string) {
 	lsesslock.Lock()
 	delete(loginSessions, cookieTok)
 	sesschange = true
@@ -110,27 +118,35 @@ func deleteAuthSession(cookieTok string){
 }
 
 func writeAuthSessionCache() {
-	if !sesschange { return } //no changes
+	if !sesschange {
+		return
+	} //no changes
 	lsesslock.Lock()
 	sesschange = false
 	dat, err := json.Marshal(loginSessions)
 	lsesslock.Unlock()
 	if err == nil {
 		err = ioutil.WriteFile(InstallDir+"/.session_cache", dat, 0600)
-		if err != nil { fmt.Println("Cannot save session cache file!") }
+		if err != nil {
+			fmt.Println("Cannot save session cache file!")
+		}
 	}
 }
 
 func readAuthSessionCache() {
 	expire := time.Now().Add(time.Minute * 10).Unix()
-	dat, err := ioutil.ReadFile(InstallDir+"/.session_cache")
-	if err != nil { fmt.Println("Error reading session cache", err) ; return }
+	dat, err := ioutil.ReadFile(InstallDir + "/.session_cache")
+	if err != nil {
+		fmt.Println("Error reading session cache", err)
+		return
+	}
 	_ = json.Unmarshal(dat, &loginSessions)
 	for _, sess := range loginSessions {
 		sess.Expires = expire
 	}
-	fmt.Println("Session Cache Length:", len(loginSessions) )
+	fmt.Println("Session Cache Length:", len(loginSessions))
 }
+
 // ==============================
 // Temporary Cookie Management
 // ==============================
@@ -140,10 +156,10 @@ func GenerateClientCookieToken(w http.ResponseWriter) string {
 	encoded, err := secure.Encode(cookiename, value)
 	if err == nil {
 		cookie := &http.Cookie{
-			Name:  cookiename,
-			Value: encoded,
-			Path:  "/",
-			Secure: true,
+			Name:     cookiename,
+			Value:    encoded,
+			Path:     "/",
+			Secure:   true,
 			HttpOnly: true,
 		}
 		http.SetCookie(w, cookie)
@@ -153,17 +169,21 @@ func GenerateClientCookieToken(w http.ResponseWriter) string {
 
 func ReadClientCookieToken(r *http.Request) string {
 	cookie, err := r.Cookie(cookiename)
-	if err != nil { return "" }
+	if err != nil {
+		return ""
+	}
 	var value string
 	err = secure.Decode(cookiename, cookie.Value, &value)
-	if err != nil { return "" }
+	if err != nil {
+		return ""
+	}
 	return value
 }
 
 func RemoveClientCookie(w http.ResponseWriter) {
 	cookie := &http.Cookie{
-		Name:  cookiename,
-		MaxAge: -1,	//This tells the browser to delete immediately
+		Name:   cookiename,
+		MaxAge: -1, //This tells the browser to delete immediately
 	}
 	http.SetCookie(w, cookie)
 }
@@ -176,14 +196,14 @@ func CheckLogin(w http.ResponseWriter, r *http.Request) (string, string) {
 	userid := ""
 	tok := ReadClientCookieToken(r)
 	//fmt.Println("Check Login:", tok)
-	
+
 	if tok != "" {
 		auth := findAuthSession(tok)
-		if auth == nil { 
+		if auth == nil {
 			//cookie expired or token de-authorized?
 			RemoveClientCookie(w)
 			tok = "" //expired tok - don't return this
-		}else{
+		} else {
 			userid = auth.Login_name
 		}
 	}
@@ -200,7 +220,7 @@ func CheckLogin(w http.ResponseWriter, r *http.Request) (string, string) {
 func GenerateLoginToken(w http.ResponseWriter, r *http.Request, user string) {
 	//This is run after verifying login credentials with oauth, just to set the temporary token for this valid login
 	tok := GenerateClientCookieToken(w)
-	auth := AuthSession {
+	auth := AuthSession{
 		Login_name: user,
 	}
 	saveAuthSession(tok, &auth)

@@ -32,6 +32,11 @@ a:hover {
   color: var(--COLOR-Secondary-lighter);
 }
 
+p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 input {
   font-family: inherit;
 }
@@ -83,41 +88,42 @@ input {
 }
 
 body {
-  background: var(--COLOR-Background-light);
+  position: absolute;
   width: 100%;
-  border-spacing: 0;
-  margin: 0;
   height: 100vh;
+  margin: 0;
+  background: url(/static/background.jpg);
+  box-shadow: inset 0 0 0 100vh rgba(0,0,0,0.5);
+  color: var(--COLOR-text-light);
+  font-family: asap;
 }
-button {
+.body-header {
+  top:0;
+  position: absolute;
+  width: 100%;
+}
+.body-footer {
+  bottom:0;
+  position: absolute;
+  width: 100%;
+}
+
+/* Items within the menu popup */
+.menuitem {
+  background: transparent;
   font-family: inherit;
+  padding: 0.2ex;
+  border-radius: 0.3ex;
+  border: 1px solid transparent;
+}
+.menuitem:hover {
+  background: var(--COLOR-Primary-lighter);
+  color: var(--COLOR-text-dark);
 }
 
 h1, h2 {
   text-align: center;
 }
-
-/*h1, h2, h3, h4, h5 {
-	font-family: grenzegotisch;
-}*/
-/*.footer {
-  align-self: flex-end;
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  background-color: var(--COLOR-Background-dark);
-  overflow: hidden;
-  align-items: center;
-  font-size: xx-small;
-}
-.footer .button {
-  margin-left: 1ex;
-  font-size: small;
-  padding: 0.5ex;
-}
-.footer .button:hover {
-  color: var(--COLOR-text-dark);
-}*/
 
 table {
   border-spacing: 0;
@@ -168,6 +174,7 @@ td button {
   font-weight: bold;
   border: none;
   cursor: pointer;
+  font-family: inherit;
 }
 
 .button:hover, button:hover {
@@ -185,30 +192,6 @@ td button {
 
 .inputform p label, .inputform p input {
   display: table-cell;
-}
-
-.svg-error {
-  background-image: linear-gradient(to bottom right, red, orange);
-  border-radius: 1ex;
-  border: transparent;
-  min-width: 3ex;
-  padding: 1px
-}
-
-.svg-active {
-  background-image: linear-gradient(to bottom right, lightgreen, lime);
-  border-radius: 1ex;
-  border: transparent;
-  min-width: 3ex;
-  padding: 1px
-}
-
-.svg-warning {
-  background-image: linear-gradient(to bottom right, orange, yellow);
-  border-radius: 1ex;
-  border: transparent;
-  min-width: 3ex;
-  padding: 1px
 }
 
 .panel {
@@ -270,42 +253,6 @@ td button {
 }
 .panel-close-button:hover{
   background-color: var(--COLOR-Primary-lighter);
-}
-
-/* Tooltip container */
-.tooltip {
-  position: relative;
-  display: inline-block;
-  border-bottom-style: dotted;
-  border-bottom-width: 1px;
-}
-
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  min-width: 10em;
-  width: auto;
-  background-color: var(--COLOR-Background-light);
-  color: var(--COLOR-text-light);
-  text-align: center;
-  border-radius: 5px;
-  padding: 1ex;
-  opacity: 0;
-  transition: opacity 0.3s;
-  
-  /* Position the tooltip */
-  position: absolute;
-  z-index: 1000;
-  top: 0%;
-  left: 100%;
-}
-
-
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
 }
 
 .tablink {

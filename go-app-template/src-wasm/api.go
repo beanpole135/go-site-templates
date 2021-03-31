@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/json"
-	"net/http"
-	"github.com/maxence-charriere/go-app/v8/pkg/app"
 	"bytes"
-	"io/ioutil"
+	"encoding/json"
 	"errors"
+	"github.com/maxence-charriere/go-app/v8/pkg/app"
+	"io/ioutil"
+	"net/http"
 )
 
 // Generic funtion for sending an arbitrary API call
@@ -14,10 +14,10 @@ import (
 func SendAPI(api string, args interface{}) ([]byte, error) {
 	//Send an API call to the backend and return the reply + ok state
 	rawurl := app.Window().URL()
-	rawurl.Path = "/api/"+api
+	rawurl.Path = "/api/" + api
 	rawurl.RawQuery = ""
 	rawurl.Fragment = ""
-	app.Log("Send API:", rawurl.String() )
+	app.Log("Send API:", rawurl.String())
 	var resp *http.Response
 	var err error
 	if args != nil {
@@ -26,15 +26,17 @@ func SendAPI(api string, args interface{}) ([]byte, error) {
 		buf := bytes.NewBuffer(dat)
 		req, _ := http.NewRequest("GET", rawurl.String(), buf)
 		resp, err = http.DefaultClient.Do(req)
-		//resp, err = http.Post(rawurl.String(), "application/json", buf) 
-	}else {
+		//resp, err = http.Post(rawurl.String(), "application/json", buf)
+	} else {
 		resp, err = http.Get(rawurl.String())
 	}
 	//Now read the reply and return
-	if err != nil { return []byte{}, err } //error in request/reply
+	if err != nil {
+		return []byte{}, err
+	} //error in request/reply
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return []byte{}, errors.New("Error Code: " +resp.Status)
+		return []byte{}, errors.New("Error Code: " + resp.Status)
 	}
 
 	return ioutil.ReadAll(resp.Body)
@@ -47,13 +49,15 @@ func SendAPI_Login(username string, password string) error {
 	rawurl.Path = "/api/login"
 	rawurl.RawQuery = ""
 	rawurl.Fragment = ""
-	req, err := http.NewRequest("GET",rawurl.String(), nil)
-	req.SetBasicAuth(username,password)
+	req, err := http.NewRequest("GET", rawurl.String(), nil)
+	req.SetBasicAuth(username, password)
 	resp, err := http.DefaultClient.Do(req)
-	if err != nil { return err } //error in request/reply
+	if err != nil {
+		return err
+	} //error in request/reply
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		err = errors.New("Error Code: " +resp.Status)
+		err = errors.New("Error Code: " + resp.Status)
 	}
 	return err
 }

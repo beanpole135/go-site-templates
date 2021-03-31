@@ -6,6 +6,6 @@ import (
 
 //Main function for the WASM browser-side app to start up.
 func main() {
-  app.Route("/", new(Session) )
-  app.RunWhenOnBrowser()
+	app.Route("/", new(Session))
+	app.RunWhenOnBrowser()
 }

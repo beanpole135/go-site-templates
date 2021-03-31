@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/maxence-charriere/go-app/v8/pkg/app"
 	"fmt"
+	"github.com/maxence-charriere/go-app/v8/pkg/app"
 )
 
 // Example/Template file for a new page
@@ -19,13 +19,13 @@ func (P *PageLogin) Render() app.HTMLMain { //return is important for the "MainP
 	)
 }
 
-func (P *PageLogin) Login(ctx app.Context, ev app.Event){
-	err := SendAPI_Login("test","test")
-	if err == nil { 
+func (P *PageLogin) Login(ctx app.Context, ev app.Event) {
+	err := SendAPI_Login("test", "test")
+	if err == nil {
 		CACHE.LoggedIn = true
-		SESSION.ChangePage("/","")
-		SESSION.Popup("icon","Successfully logged in!")
-	}else{
-		SESSION.Popup("icon","Error Logging in...")
+		SESSION.ChangePage("/", "")
+		SESSION.Popup("icon", "Successfully logged in!")
+	} else {
+		SESSION.Popup("icon", "Error Logging in...")
 	}
 }
