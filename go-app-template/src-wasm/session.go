@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/maxence-charriere/go-app/v8/pkg/app"
+	"strconv"
 )
 
 // ====================
@@ -58,6 +59,8 @@ type SessionCache struct {
 	PopupString PopupStringResult
 	Popup_page  DialogPage
 	Popup_menu  []MenuItem
+	Popup_pix_X int
+	Popup_pix_Y int
 }
 
 // Primary Visual Element for the UI
@@ -142,6 +145,17 @@ func (P *Session) RenderPopup() app.UI {
 			app.P().Text(SC.PopupText),
 			app.Button().Text("Continue").OnClick(P.PopupAnswer),
 		)
+	}
+	if SC.Popup_pix_X != 0 && SC.Popup_pix_Y != 0 {
+		maxX, maxY := app.Window().Size()
+		maxX = maxX - SC.Popup_pix_X
+		maxY = maxY - SC.Popup_pix_Y
+		dlg.
+		Style("top", strconv.Itoa(SC.Popup_pix_Y)+"px" ).
+		Style("left", strconv.Itoa(SC.Popup_pix_X)+"px" ).
+		Style("max-height", strconv.Itoa(maxY)+"px" ).
+		Style("max-width", strconv.Itoa(maxX)+"px" ).
+		Style("margin","0")
 	}
 	return dlg
 }

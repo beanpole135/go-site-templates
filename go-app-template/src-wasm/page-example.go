@@ -39,7 +39,10 @@ func (P *PageExample) ShowContextMenu(ctx app.Context, ev app.Event) {
 	menu = append(menu, MenuItem{ID: "2", Text: "Item 2"})
 	menu = append(menu, MenuItem{ID: "3", Text: "Item 3"})
 	menu = append(menu, MenuItem{ID: "4", Text: "Item 4"})
-	SESSION.PopupContextMenu(ev, menu, P.ContextMenuCallback)
+	//Align the context menu to the bottom of the element clicked
+	SESSION.PopupContextMenu(menu, P.ContextMenuCallback, &ctx)
+	//Align the context menu to the current mouse position
+	//SESSION.PopupContextMenu(menu, P.ContextMenuCallback, nil)
 }
 
 func (P *PageExample) ContextMenuCallback(id string) {
