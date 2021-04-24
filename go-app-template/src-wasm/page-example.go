@@ -11,11 +11,14 @@ type PageExample struct {
 	app.Compo
 	// Information can be stored here that only persists for the duration of this page
 	// For persistent info storage, use the global CACHE object
+	title *string //Link this over to the CACHE to get a global value
 }
 
 func (P *PageExample) Render() app.HTMLMain { //return is important for the "MainPage" interface definition
 	fmt.Println("Render Page Example")
+	if P.title == nil { P.title = &CACHE.PageTitle }
 	return app.Main().Body(
+		app.H1().Text(*P.title),
 		app.H1().Text("Header1"),
 		app.H2().Text("Header2"),
 		app.H3().Text("Header3"),

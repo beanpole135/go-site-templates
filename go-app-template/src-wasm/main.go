@@ -7,5 +7,6 @@ import (
 //Main function for the WASM browser-side app to start up.
 func main() {
 	app.Route("/", new(Session))
+	CACHE.RandomizeOnTimer()
 	app.RunWhenOnBrowser()
 }
