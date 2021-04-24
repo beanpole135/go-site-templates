@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 	"strings"
-	"github.com/maxence-charriere/go-app/v8/pkg/app"
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
 // Various interaction functions for the global session
@@ -22,7 +22,7 @@ func (P *Session) ChangePage(pageid string, title string){
   //Ensure the slide-out panel and popups are cleared on page changes
   P.HidePopup()
   P.HidePanel()
-  P.Update()
+  //P.Update()
 }
 
 // === Popup Dialogs ===
@@ -35,7 +35,7 @@ func (P *Session) HidePopup() {
 	SC.Popup_menu = nil
 	SC.Popup_pix_X = 0
 	SC.Popup_pix_Y = 0
-	P.Update()
+	//P.Update()
 }
 
 func (P *Session) Popup( icon string, text string){
@@ -45,7 +45,7 @@ func (P *Session) Popup( icon string, text string){
 	SC.ShowPopup = true
 	SC.PopupYesNo = nil
 	SC.PopupString = nil
-	P.Update()
+	//P.Update()
 	go func(){
 		time.Sleep(3 * time.Second)
 		P.HidePopup()
@@ -59,7 +59,7 @@ func (P *Session) PopupTextBox( icon string, text string){
 	SC.ShowPopup = true
 	SC.PopupYesNo = nil
 	SC.PopupString = nil
-	P.Update()
+	//P.Update()
 }
 
 func (P *Session) PopupYesNoBox( icon string, text string, callback PopupResult){
@@ -68,7 +68,7 @@ func (P *Session) PopupYesNoBox( icon string, text string, callback PopupResult)
 	SC.PopupText = text
 	SC.ShowPopup = true
 	SC.PopupYesNo = callback
-	P.Update()
+	//P.Update()
 }
 
 func (P *Session) PopupStringQuestion( icon string, text string, callback PopupStringResult) {
@@ -77,7 +77,7 @@ func (P *Session) PopupStringQuestion( icon string, text string, callback PopupS
 	SC.PopupText = text
 	SC.ShowPopup = true
 	SC.PopupString = callback
-	P.Update()
+	//P.Update()
 }
 
 func (P *Session) PopupDialog(icon string, text string, body DialogPage){
@@ -86,7 +86,7 @@ func (P *Session) PopupDialog(icon string, text string, body DialogPage){
 	SC.PopupText = text
 	SC.ShowPopup = true
 	SC.Popup_page = body
-	P.Update()
+	//P.Update()
 }
 
 // === Context Menu functions ===
@@ -107,7 +107,7 @@ func (P *Session) PopupContextMenu(list []MenuItem, callback PopupStringResult, 
 	SC.Popup_menu = list
 	SC.PopupString = callback
 	SC.ShowPopup = true
-	P.Update()
+	//P.Update()
 }
 
 // === Slide-out Panel functions ===
@@ -117,12 +117,12 @@ func (P *Session) ShowPanel( icon string, title string, body DialogPage) {
 	SC.Panel_title = title
 	SC.Panel_icon = icon
 	SC.Panel_show = true
-	P.Update()
+	//P.Update()
 }
 
 func (P *Session) HidePanel(){
 	if SC.Panel_show == false { return } //nothing to do
 	SC.Panel_show = false
 	SC.Panel_page = nil
-	P.Update()
+	//P.Update()
 }

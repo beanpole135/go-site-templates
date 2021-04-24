@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/maxence-charriere/go-app/v8/pkg/app"
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
 // Example/Template file for a new page
 
 type PageExample struct {
+	app.Compo
 	// Information can be stored here that only persists for the duration of this page
 	// For persistent info storage, use the global CACHE object
 }
