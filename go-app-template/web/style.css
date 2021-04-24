@@ -119,6 +119,7 @@ body {
 .menuitem:hover {
   background: var(--COLOR-Primary-lighter);
   color: var(--COLOR-text-dark);
+  cursor: pointer;
 }
 
 h1, h2 {
