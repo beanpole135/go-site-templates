@@ -156,11 +156,15 @@ func (P *Session) RenderPopup() app.UI {
 		Style("max-height", strconv.Itoa(maxY)+"px" ).
 		Style("max-width", strconv.Itoa(maxX)+"px" ).
 		Style("margin","0")
+	}else{
+		dlg.Style("top","50%").
+			Style("left","50%").
+			Style("transform","translate(-50%,-50%)")
 	}
 	return dlg
 }
-func (P *Session) RenderPopupDialog() app.HTMLDialog {
-	return app.Dialog().Hidden(false).Open(true).
+func (P *Session) RenderPopupDialog() app.HTMLDiv {
+	return app.Div().
 		Class("popup").
 		Style("border", "0.2ex solid var(--COLOR-Accent)").
 		Style("background", "var(--COLOR-Background-dark)").
@@ -169,7 +173,8 @@ func (P *Session) RenderPopupDialog() app.HTMLDialog {
 		Style("top", "40%").
 		Style("border-radius", "1ex").
 		Style("z-index", "1000").
-		Style("max-width", "50%")
+		Style("max-width", "50%").
+		Style("padding","0.5ex")
 }
 func (P *Session) RenderCoverWindow() app.UI {
 	if !SC.ShowPopup && SC.Panel_page == nil{
@@ -246,7 +251,7 @@ func (P *Session) PopupAnswer(ctx app.Context, e app.Event) {
 	// Triggers another popup of some kind.
 	if SC.PopupYesNo != nil {
 		callback := SC.PopupYesNo
-		id := ctx.JSSrc.Get("id").String()
+		id := ctx.JSSrc().Get("id").String()
 		P.HidePopup()
 		switch id {
 		case "no":
@@ -256,7 +261,7 @@ func (P *Session) PopupAnswer(ctx app.Context, e app.Event) {
 		}
 	} else if SC.PopupString != nil {
 		callback := SC.PopupString
-		id := ctx.JSSrc.Get("id").String()
+		id := ctx.JSSrc().Get("id").String()
 		if id == "no" {
 			//cancelled - do nothing
 			P.HidePopup()

@@ -197,6 +197,7 @@ td button {
 
 .panel {
   width: 30%;
+  height: 100%;
   position: fixed;
   top: 0;
   bottom: 0;

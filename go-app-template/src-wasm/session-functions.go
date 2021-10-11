@@ -90,14 +90,14 @@ func (P *Session) PopupDialog(icon string, text string, body DialogPage){
 }
 
 // === Context Menu functions ===
-func (P *Session) PopupContextMenu(list []MenuItem, callback PopupStringResult, ctx *app.Context){
+func (P *Session) PopupContextMenu(list []MenuItem, callback PopupStringResult, ctx app.Context){
 	//Note: Use the "HidePopup()" function to cancel a context menu
 	if ctx == nil {
 		//Use the current mouse position
 		SC.Popup_pix_X, SC.Popup_pix_Y = app.Window().CursorPosition()
 	} else {
 		//Use the bottom-left of the element clicked
-		rect := ctx.JSSrc.Call("getBoundingClientRect")
+		rect := ctx.JSSrc().Call("getBoundingClientRect")
 		yoffset := app.Window().Get("pageYOffset").Int()
 		xoffset := app.Window().Get("pageXOffset").Int()
 		//put in absolute coords
