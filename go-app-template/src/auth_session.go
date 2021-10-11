@@ -159,8 +159,8 @@ func GenerateClientCookieToken(w http.ResponseWriter) string {
 			Name:     cookiename,
 			Value:    encoded,
 			Path:     "/",
-			Secure:   true,
-			SameSite: http.SameSiteStrictMode,
+			Secure:   false,
+			SameSite: http.SameSiteDefaultMode,
 			HttpOnly: true,
 		}
 		http.SetCookie(w, cookie)
@@ -184,10 +184,10 @@ func ReadClientCookieToken(r *http.Request) string {
 func RemoveClientCookie(w http.ResponseWriter) {
 	cookie := &http.Cookie{
 		Name:     cookiename,
-		Value:    encoded,
+		//Value:    encoded,
 		Path:     "/",
-		Secure:   true,
-		SameSite: http.SameSiteStrictMode,
+		Secure:   false,
+		SameSite: http.SameSiteDefaultMode,
 		HttpOnly: true,
 		MaxAge: -1, //This tells the browser to delete immediately
 	}
