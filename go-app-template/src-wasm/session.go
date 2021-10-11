@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/maxence-charriere/go-app/v8/pkg/app"
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
 	"strconv"
 )
 
@@ -114,7 +114,7 @@ func (P *Session) RenderPopup() app.UI {
 				app.Button().Text("cancel").OnClick(P.HidePopupCallback),
 			),
 			SC.Popup_page.Render(),
-		).Style("display","flex").Style("flex-direction","column")
+		).Style("display", "flex").Style("flex-direction", "column")
 	} else if SC.PopupYesNo != nil {
 		dlg.Body(
 			app.P().Text(SC.PopupText).Style("font-size", "large"),
@@ -125,11 +125,11 @@ func (P *Session) RenderPopup() app.UI {
 				Style("display", "flex").
 				Style("align-items", "center").
 				Style("justify-content", "space-evenly"),
-		).Style("display","flex").Style("flex-direction","column")
+		).Style("display", "flex").Style("flex-direction", "column")
 	} else if SC.Popup_menu != nil {
 		dlg.Body(
 			app.Range(SC.Popup_menu).Slice(P.RenderMenuItem),
-		).Style("display","flex").Style("flex-direction","column")
+		).Style("display", "flex").Style("flex-direction", "column")
 
 	} else if SC.PopupString != nil {
 		dlg.Body(
@@ -139,7 +139,7 @@ func (P *Session) RenderPopup() app.UI {
 				app.Button().ID("no").Text("Cancel").OnClick(P.PopupAnswer),
 				app.Button().ID("yes").Text("Continue").OnClick(P.PopupAnswer),
 			).Style("display", "flex").Style("align-items", "center").Style("justify-content", "space-evenly"),
-		).Style("display","flex").Style("flex-direction","column")
+		).Style("display", "flex").Style("flex-direction", "column")
 	} else {
 		dlg.Body(
 			app.P().Text(SC.PopupText),
@@ -151,16 +151,20 @@ func (P *Session) RenderPopup() app.UI {
 		maxX = maxX - SC.Popup_pix_X
 		maxY = maxY - SC.Popup_pix_Y
 		dlg.
-		Style("top", strconv.Itoa(SC.Popup_pix_Y)+"px" ).
-		Style("left", strconv.Itoa(SC.Popup_pix_X)+"px" ).
-		Style("max-height", strconv.Itoa(maxY)+"px" ).
-		Style("max-width", strconv.Itoa(maxX)+"px" ).
-		Style("margin","0")
+			Style("top", strconv.Itoa(SC.Popup_pix_Y)+"px").
+			Style("left", strconv.Itoa(SC.Popup_pix_X)+"px").
+			Style("max-height", strconv.Itoa(maxY)+"px").
+			Style("max-width", strconv.Itoa(maxX)+"px").
+			Style("margin", "0")
+	} else {
+		dlg.Style("top", "50%").
+			Style("left", "50%").
+			Style("transform", "translate(-50%,-50%)")
 	}
 	return dlg
 }
-func (P *Session) RenderPopupDialog() app.HTMLDialog {
-	return app.Dialog().Hidden(false).Open(true).
+func (P *Session) RenderPopupDialog() app.HTMLDiv {
+	return app.Div().
 		Class("popup").
 		Style("border", "0.2ex solid var(--COLOR-Accent)").
 		Style("background", "var(--COLOR-Background-dark)").
@@ -169,26 +173,27 @@ func (P *Session) RenderPopupDialog() app.HTMLDialog {
 		Style("top", "40%").
 		Style("border-radius", "1ex").
 		Style("z-index", "1000").
-		Style("max-width", "50%")
+		Style("max-width", "50%").
+		Style("padding", "0.5ex")
 }
 func (P *Session) RenderCoverWindow() app.UI {
-	if !SC.ShowPopup && SC.Panel_page == nil{
+	if !SC.ShowPopup && SC.Panel_page == nil {
 		return nil
 	}
 	//Need to show a cover window
 	cover := app.Div().
-		Style("background","#00000010").
-		Style("position","absolute").
-		Style("top","0").
-		Style("bottom","0").
-		Style("left","0").
-		Style("right","0")
-	if SC.ShowPopup{
-		return cover.Style("z-index","999").OnClick(P.HidePopupCallback)
-	}else{
-		return cover.Style("z-index","499").OnClick(P.HidePanelCallback)
+		Style("background", "#00000010").
+		Style("position", "absolute").
+		Style("top", "0").
+		Style("bottom", "0").
+		Style("left", "0").
+		Style("right", "0")
+	if SC.ShowPopup {
+		return cover.Style("z-index", "999").OnClick(P.HidePopupCallback)
+	} else {
+		return cover.Style("z-index", "499").OnClick(P.HidePanelCallback)
 	}
-		
+
 }
 
 func (P *Session) RenderMenuItem(index int) app.UI {
@@ -210,12 +215,12 @@ func (P *Session) RenderMenuItem(index int) app.UI {
 func (P *Session) RenderPanel() app.UI {
 	if SC.Panel_page != nil {
 		return app.Dialog().Class("panel").ID("right-panel").Hidden(!SC.Panel_show).Open(SC.Panel_show).Body(
-				app.Span().Class("panel-header").Body(
-					app.H2().Text(SC.Panel_title),
-					app.Button().Text("Cancel").OnClick(P.HidePanelCallback).Style("padding", "1ex"),
-				),
-				SC.Panel_page.Render().Class("panel-content"),
-			).
+			app.Span().Class("panel-header").Body(
+				app.H2().Text(SC.Panel_title),
+				app.Button().Text("Cancel").OnClick(P.HidePanelCallback).Style("padding", "1ex"),
+			),
+			SC.Panel_page.Render().Class("panel-content"),
+		).
 			Style("width", "50%").
 			Style("z-index", "500")
 	} else {
@@ -226,8 +231,8 @@ func (P *Session) RenderPanel() app.UI {
 			),
 			app.Div().Class("panel-content"),
 		).
-		Style("width", "0").
-		Style("z-index", "500")
+			Style("width", "0").
+			Style("z-index", "500")
 	}
 }
 
@@ -246,7 +251,7 @@ func (P *Session) PopupAnswer(ctx app.Context, e app.Event) {
 	// Triggers another popup of some kind.
 	if SC.PopupYesNo != nil {
 		callback := SC.PopupYesNo
-		id := ctx.JSSrc.Get("id").String()
+		id := ctx.JSSrc().Get("id").String()
 		P.HidePopup()
 		switch id {
 		case "no":
@@ -256,7 +261,7 @@ func (P *Session) PopupAnswer(ctx app.Context, e app.Event) {
 		}
 	} else if SC.PopupString != nil {
 		callback := SC.PopupString
-		id := ctx.JSSrc.Get("id").String()
+		id := ctx.JSSrc().Get("id").String()
 		if id == "no" {
 			//cancelled - do nothing
 			P.HidePopup()

@@ -2,19 +2,25 @@ package main
 
 import (
 	"fmt"
-	"github.com/maxence-charriere/go-app/v8/pkg/app"
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
 // Example/Template file for a new page
 
 type PageExample struct {
+	app.Compo
 	// Information can be stored here that only persists for the duration of this page
 	// For persistent info storage, use the global CACHE object
+	title *string //Link this over to the CACHE to get a global value
 }
 
 func (P *PageExample) Render() app.HTMLMain { //return is important for the "MainPage" interface definition
 	fmt.Println("Render Page Example")
+	if P.title == nil {
+		P.title = &CACHE.PageTitle
+	}
 	return app.Main().Body(
+		app.H1().Text(*P.title),
 		app.H1().Text("Header1"),
 		app.H2().Text("Header2"),
 		app.H3().Text("Header3"),
@@ -40,7 +46,7 @@ func (P *PageExample) ShowContextMenu(ctx app.Context, ev app.Event) {
 	menu = append(menu, MenuItem{ID: "3", Text: "Item 3"})
 	menu = append(menu, MenuItem{ID: "4", Text: "Item 4"})
 	//Align the context menu to the bottom of the element clicked
-	SESSION.PopupContextMenu(menu, P.ContextMenuCallback, &ctx)
+	SESSION.PopupContextMenu(menu, P.ContextMenuCallback, ctx)
 	//Align the context menu to the current mouse position
 	//SESSION.PopupContextMenu(menu, P.ContextMenuCallback, nil)
 }
