@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
-	"strconv"
 	"math/rand"
+	"strconv"
 	"time"
 )
 
@@ -18,10 +18,10 @@ func (D *DialogExample) RandomColor2() {
 			r := rand.Intn(255)
 			g := rand.Intn(255)
 			b := rand.Intn(255)
-			color :="rgb(" + strconv.Itoa(r) + "," + strconv.Itoa(g) + "," + strconv.Itoa(b) + ")"
+			color := "rgb(" + strconv.Itoa(r) + "," + strconv.Itoa(g) + "," + strconv.Itoa(b) + ")"
 			if now.Second()%2 == 0 {
 				tmp = color
-			}else{
+			} else {
 				D.color = color
 			}
 		}
@@ -32,18 +32,22 @@ type DialogExample struct {
 	app.Compo
 	// Information can be stored here that only persists for the duration of this page
 	// For persistent info storage, use the global CACHE object
-	color string
-	color2 *string
+	color      string
+	color2     *string
 	timestring *string
 }
 
 func (D *DialogExample) Render() app.HTMLDiv {
-	if D.color == "" { D.color = "#aaaaaa" }
+	if D.color == "" {
+		D.color = "#aaaaaa"
+	}
 	if D.color2 == nil {
 		D.color2 = &tmp
 		D.RandomColor2()
 	}
-	if D.timestring == nil { D.timestring = &CACHE.PageTitle }
+	if D.timestring == nil {
+		D.timestring = &CACHE.PageTitle
+	}
 	return app.Div().Body(
 		app.P().Text("I am an example component!\nI can be placed within all sorts of locations in the UI, including in pull-out panels or popup boxes!"),
 		app.Button().Text("Random Color").OnClick(D.RandomColor).Style("background", D.color),

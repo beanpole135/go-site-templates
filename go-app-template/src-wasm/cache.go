@@ -19,7 +19,7 @@ func (C *Cache) RandomizeOnTimer() {
 	go func() {
 		for now := range time.Tick(time.Second) {
 			C.PageTitle = now.Format("Mon Jan 2, 2006, 15:04:05 MST")
-			if (now.Second()%2) == 0 {
+			if (now.Second() % 2) == 0 {
 				//Only force-update the session every other second.
 				// If the go-app system is detecting the string change, then we should see it keep time every second.
 				// otherwise, we will only see it change every other second.

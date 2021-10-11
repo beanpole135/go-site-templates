@@ -16,7 +16,9 @@ type PageExample struct {
 
 func (P *PageExample) Render() app.HTMLMain { //return is important for the "MainPage" interface definition
 	fmt.Println("Render Page Example")
-	if P.title == nil { P.title = &CACHE.PageTitle }
+	if P.title == nil {
+		P.title = &CACHE.PageTitle
+	}
 	return app.Main().Body(
 		app.H1().Text(*P.title),
 		app.H1().Text("Header1"),
